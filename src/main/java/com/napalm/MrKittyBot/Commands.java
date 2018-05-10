@@ -1,6 +1,7 @@
 package com.napalm.MrKittyBot;
 
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -9,10 +10,12 @@ public class Commands extends ListenerAdapter {
 	@Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
+		if(event.getAuthor().isBot())
+			return;
+		
         if (event.isFromType(ChannelType.PRIVATE))
         {
-            System.out.printf("[PM] %s: %s%n", event.getAuthor().getName(),
-                                    event.getMessage().getContentDisplay());
+            sendPrivate(event.getAuthor().openPrivateChannel().complete(), "I don't do private messages yet. Stop. Also meow.");
         }
         else
         {
@@ -21,5 +24,9 @@ public class Commands extends ListenerAdapter {
                         event.getMessage().getContentDisplay());
         }
     }
+	
+	public void sendPrivate(PrivateChannel channel, String message) {
+		channel.sendMessage(message).queue();
+	}
 
 }
